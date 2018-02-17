@@ -36,7 +36,7 @@ fi
 mv -v /etc/nginx/conf.d /etc/nginx/conf.d.disabled
 
 (
- sleep 5 #give nginx time to start
+ sleep 10 #give nginx time to start
  echo "start letsencrypt updater"
  while :
  do
