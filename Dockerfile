@@ -13,8 +13,6 @@ RUN \
  apk add  --update certbot tzdata openssl && \
  rm -rf /var/cache/apk/*
 
-RUN echo 'pong' > /srv/__ping.ping
-
 # Prototype for healthcheck but if fails to get certificate with it (some kind of race condition, nginx works correctly on :80)
 # HEALTHCHECK --interval=1m30s --timeout=10s --retries=3 --start-period=3m CMD wget -q -s http://localhost/__ping.ping || exit 1
 
