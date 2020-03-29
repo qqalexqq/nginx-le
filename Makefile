@@ -1,8 +1,8 @@
 GITTAG=$(shell git describe --abbrev=0 --tags)
 
 release:
-	- docker build . -t umputun/nginx-le:$(GITTAG)
-	- docker push umputun/nginx-le:$(GITTAG)
-	- docker push umputun/nginx-le:latest
+	- docker build . -t 2q.re/nginx-le:$(GITTAG)
+	- docker push 2q.re/nginx-le:$(GITTAG)
+	- docker push 2q.re/nginx-le:latest
 
 .PHONY: release
