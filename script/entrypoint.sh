@@ -13,20 +13,13 @@ SSL_CHAIN_CERT=/etc/nginx/ssl/${SSL_CHAIN_CERT}
 
 mkdir -p /etc/nginx/conf.d
 mkdir -p /etc/nginx/ssl
-mkdir -p /etc/nginx/snippets
 
 #collect services
 SERVICES=$(find "/etc/nginx/" -type f -maxdepth 1 -name "service*.conf")
-SNIPPETS=$(find "/etc/nginx/" -type f -maxdepth 1 -name "snippet*.conf")
 
 #copy /etc/nginx/service*.conf if any of service*.conf mounted
 if [ ${#SERVICES} -ne 0 ]; then
     cp -fv /etc/nginx/service*.conf /etc/nginx/conf.d/
-fi
-
-#copy /etc/nginx/snippet*.conf if any of snippet*.conf mounted
-if [ ${#SNIPPETS} -ne 0 ]; then
-    cp -fv /etc/nginx/snippet*.conf /etc/nginx/snippets/
 fi
 
 #replace SSL_KEY, SSL_CERT and SSL_CHAIN_CERT by actual keys
@@ -34,13 +27,8 @@ sed -i "s|SSL_KEY|${SSL_KEY}|g" /etc/nginx/conf.d/*.conf
 sed -i "s|SSL_CERT|${SSL_CERT}|g" /etc/nginx/conf.d/*.conf
 sed -i "s|SSL_CHAIN_CERT|${SSL_CHAIN_CERT}|g" /etc/nginx/conf.d/*.conf
 
-sed -i "s|SSL_KEY|${SSL_KEY}|g" /etc/nginx/snippets/*.conf
-sed -i "s|SSL_CERT|${SSL_CERT}|g" /etc/nginx/snippets/*.conf
-sed -i "s|SSL_CHAIN_CERT|${SSL_CHAIN_CERT}|g" /etc/nginx/snippets/*.conf
-
 #replace LE_FQDN
 sed -i "s|LE_FQDN|${LE_FQDN}|g" /etc/nginx/conf.d/*.conf
-sed -i "s|LE_FQDN|${LE_FQDN}|g" /etc/nginx/snippets/*.conf
 
 #generate dhparams.pem
 if [ ! -f /etc/nginx/ssl/dhparams.pem ]; then
@@ -52,7 +40,6 @@ fi
 
 #disable ssl configuration and let it run without SSL
 mv -v /etc/nginx/conf.d /etc/nginx/conf.d.disabled
-mv -v /etc/nginx/snippets /etc/nginx/snippets.disabled
 
 (
  sleep 10 #give nginx time to start
@@ -63,7 +50,6 @@ mv -v /etc/nginx/snippets /etc/nginx/snippets.disabled
     /le.sh
     rm -f /etc/nginx/conf.d/default.conf 2>/dev/null #on the first run remove default config, conflicting on 80
     mv -v /etc/nginx/conf.d.disabled /etc/nginx/conf.d 2>/dev/null #on the first run enable config back
-    mv -v /etc/nginx/snippets.disabled /etc/nginx/snippets 2>/dev/null #on the first run enable config back
     echo "reload nginx with ssl"
     nginx -s reload
     sleep 10d
