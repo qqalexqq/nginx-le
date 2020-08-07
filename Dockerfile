@@ -1,4 +1,4 @@
-FROM nginx:1.17.8-alpine
+FROM nginx:1.19.1-alpine
 
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 #ADD conf/service.conf /etc/nginx/conf.d/service.conf

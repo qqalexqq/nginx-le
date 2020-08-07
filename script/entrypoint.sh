@@ -29,6 +29,8 @@ sed -i "s|SSL_CHAIN_CERT|${SSL_CHAIN_CERT}|g" /etc/nginx/conf.d/*.conf
 
 #replace LE_FQDN
 sed -i "s|LE_FQDN|${LE_FQDN}|g" /etc/nginx/conf.d/*.conf
+#replace LE_BASEDOMAIN
+sed -i "s|LE_BASEDOMAIN|${LE_BASEDOMAIN}|g" /etc/nginx/conf.d/*.conf
 
 #generate dhparams.pem
 if [ ! -f /etc/nginx/ssl/dhparams.pem ]; then
@@ -56,4 +58,4 @@ mv -v /etc/nginx/conf.d /etc/nginx/conf.d.disabled
  done
 ) &
 
-nginx -g "daemon off;"
+nginx${DEBUG} -g "daemon off;"
